@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Study files are parsed in the browser (src/lib/extract.ts) and only text chunks are stored — avoids upload size limits for large books.
+- AI generation runs one chunk per server function call (src/lib/ai.functions.ts), looped from the client — keeps each request short and lets the user stop anytime.
