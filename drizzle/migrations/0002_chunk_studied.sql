@@ -1,0 +1,1 @@
+ALTER TABLE public.chunks ADD COLUMN IF NOT EXISTS studied_at timestamptz;

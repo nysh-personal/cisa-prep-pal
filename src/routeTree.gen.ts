@@ -17,6 +17,7 @@ import { Route as AuthenticatedCoverageRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedExamRouteImport } from './routes/_authenticated/exam'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
 import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
+import { Route as AuthenticatedPlanRouteImport } from './routes/_authenticated/plan'
 import { Route as AuthenticatedPracticeRouteImport } from './routes/_authenticated/practice'
 import { Route as ApiAskRouteImport } from './routes/api/ask'
 import { Route as AuthenticatedLibraryDocIdRouteImport } from './routes/_authenticated/library_.$docId'
@@ -60,6 +61,11 @@ const AuthenticatedLibraryRoute = AuthenticatedLibraryRouteImport.update({
   path: '/library',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPlanRoute = AuthenticatedPlanRouteImport.update({
+  id: '/plan',
+  path: '/plan',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedPracticeRoute = AuthenticatedPracticeRouteImport.update({
   id: '/practice',
   path: '/practice',
@@ -85,6 +91,7 @@ export interface FileRoutesByFullPath {
   '/exam': typeof AuthenticatedExamRoute
   '/home': typeof AuthenticatedHomeRoute
   '/library': typeof AuthenticatedLibraryRoute
+  '/plan': typeof AuthenticatedPlanRoute
   '/practice': typeof AuthenticatedPracticeRoute
   '/api/ask': typeof ApiAskRoute
   '/library/$docId': typeof AuthenticatedLibraryDocIdRoute
@@ -97,6 +104,7 @@ export interface FileRoutesByTo {
   '/exam': typeof AuthenticatedExamRoute
   '/home': typeof AuthenticatedHomeRoute
   '/library': typeof AuthenticatedLibraryRoute
+  '/plan': typeof AuthenticatedPlanRoute
   '/practice': typeof AuthenticatedPracticeRoute
   '/api/ask': typeof ApiAskRoute
   '/library/$docId': typeof AuthenticatedLibraryDocIdRoute
@@ -111,6 +119,7 @@ export interface FileRoutesById {
   '/_authenticated/exam': typeof AuthenticatedExamRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/library': typeof AuthenticatedLibraryRoute
+  '/_authenticated/plan': typeof AuthenticatedPlanRoute
   '/_authenticated/practice': typeof AuthenticatedPracticeRoute
   '/api/ask': typeof ApiAskRoute
   '/_authenticated/library_/$docId': typeof AuthenticatedLibraryDocIdRoute
@@ -125,6 +134,7 @@ export interface FileRouteTypes {
     | '/exam'
     | '/home'
     | '/library'
+    | '/plan'
     | '/practice'
     | '/api/ask'
     | '/library/$docId'
@@ -137,6 +147,7 @@ export interface FileRouteTypes {
     | '/exam'
     | '/home'
     | '/library'
+    | '/plan'
     | '/practice'
     | '/api/ask'
     | '/library/$docId'
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/_authenticated/exam'
     | '/_authenticated/home'
     | '/_authenticated/library'
+    | '/_authenticated/plan'
     | '/_authenticated/practice'
     | '/api/ask'
     | '/_authenticated/library_/$docId'
@@ -219,6 +231,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLibraryRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/plan': {
+      id: '/_authenticated/plan'
+      path: '/plan'
+      fullPath: '/plan'
+      preLoaderRoute: typeof AuthenticatedPlanRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/practice': {
       id: '/_authenticated/practice'
       path: '/practice'
@@ -250,6 +269,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedExamRoute: typeof AuthenticatedExamRoute
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
   AuthenticatedLibraryRoute: typeof AuthenticatedLibraryRoute
+  AuthenticatedPlanRoute: typeof AuthenticatedPlanRoute
   AuthenticatedPracticeRoute: typeof AuthenticatedPracticeRoute
   AuthenticatedLibraryDocIdRoute: typeof AuthenticatedLibraryDocIdRoute
 }
@@ -261,6 +281,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedExamRoute: AuthenticatedExamRoute,
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
   AuthenticatedLibraryRoute: AuthenticatedLibraryRoute,
+  AuthenticatedPlanRoute: AuthenticatedPlanRoute,
   AuthenticatedPracticeRoute: AuthenticatedPracticeRoute,
   AuthenticatedLibraryDocIdRoute: AuthenticatedLibraryDocIdRoute,
 }

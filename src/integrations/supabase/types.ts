@@ -99,6 +99,7 @@ export type Database = {
           id: string
           idx: number
           mcq_done: boolean
+          studied_at: string | null
           user_id: string
         }
         Insert: {
@@ -111,6 +112,7 @@ export type Database = {
           id?: string
           idx: number
           mcq_done?: boolean
+          studied_at?: string | null
           user_id?: string
         }
         Update: {
@@ -123,6 +125,7 @@ export type Database = {
           id?: string
           idx?: number
           mcq_done?: boolean
+          studied_at?: string | null
           user_id?: string
         }
         Relationships: [

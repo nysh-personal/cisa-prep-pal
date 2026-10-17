@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { DOMAINS } from "@/lib/domains";
+import { daysUntil } from "@/lib/plan";
 import { fetchCoverage, pendingChunks, type Kind } from "@/lib/generate";
 import { generateCards, generateMcqs } from "@/lib/ai.functions";
 import { Button } from "@/components/ui/button";
@@ -79,6 +80,13 @@ function Home() {
           <Button disabled={!!running} onClick={() => run("cards", null)}>Cards for all</Button>
           <Button disabled={!!running} variant="secondary" onClick={() => run("mcq", null)}>MCQs for all</Button>
         </div>
+      )}
+
+      {totalChunks > 0 && (
+        <Link to="/plan" className="mx-5 mt-5 flex items-center justify-between rounded-2xl bg-accent p-4 text-accent-foreground shadow-card">
+          <span><span className="block text-xs font-semibold uppercase tracking-wider">Study plan</span><span className="font-display text-lg font-bold">Today's sections →</span></span>
+          <span className="text-right text-sm">{daysUntil(new Date().toLocaleDateString("en-CA"))} days<br />to exam</span>
+        </Link>
       )}
 
       {totalChunks > 0 && (

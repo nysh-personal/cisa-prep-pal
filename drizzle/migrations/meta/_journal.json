@@ -15,6 +15,13 @@
       "when": 1792208276371,
       "tag": "0001_ask_feature",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792209305743,
+      "tag": "0002_chunk_studied",
+      "breakpoints": true
     }
   ]
 }
