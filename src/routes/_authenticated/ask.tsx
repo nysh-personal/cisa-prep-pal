@@ -24,7 +24,7 @@ function AskPage() {
     queryFn: async () => {
       const { data, error } = await supabase.from("chat_messages").select("msg_id, role, parts, metadata").order("created_at").limit(500);
       if (error) throw error;
-      return (data ?? []).map((r) => ({ id: r.msg_id, role: r.role as AskMessage["role"], parts: r.parts as AskMessage["parts"], metadata: (r.metadata ?? undefined) as AskMessage["metadata"] }));
+      return (data ?? []).map((r) => ({ id: r.msg_id, role: r.role as AskMessage["role"], parts: r.parts as AskMessage["parts"], metadata: (r.metadata ?? {}) as NonNullable<AskMessage["metadata"]> })) as AskMessage[];
     },
     staleTime: Infinity,
   });
@@ -93,7 +93,7 @@ function Chat({ initial, onCleared }: { initial: AskMessage[]; onCleared: () => 
       </Conversation>
 
       <div className="px-3 pb-3">
-        <PromptInput onSubmit={({ text }) => { if (busy) { stop(); return; } if (text.trim()) sendMessage({ text }); }}>
+        <PromptInput onSubmit={({ text }) => { if (busy) { stop(); return; } if (text.trim()) void sendMessage({ text }); return; }}>
           <PromptInputBody>
             <PromptInputTextarea autoFocus placeholder="Ask about any CISA topic in your books…" />
           </PromptInputBody>
