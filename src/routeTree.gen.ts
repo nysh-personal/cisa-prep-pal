@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthenticatedCardsRouteImport } from './routes/_authenticated/cards'
+import { Route as AuthenticatedCoverageRouteImport } from './routes/_authenticated/coverage'
 import { Route as AuthenticatedExamRouteImport } from './routes/_authenticated/exam'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
 import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
@@ -30,6 +31,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const AuthenticatedCardsRoute = AuthenticatedCardsRouteImport.update({
   id: '/cards',
   path: '/cards',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCoverageRoute = AuthenticatedCoverageRouteImport.update({
+  id: '/coverage',
+  path: '/coverage',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedExamRoute = AuthenticatedExamRouteImport.update({
@@ -62,6 +68,7 @@ const AuthenticatedLibraryDocIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cards': typeof AuthenticatedCardsRoute
+  '/coverage': typeof AuthenticatedCoverageRoute
   '/exam': typeof AuthenticatedExamRoute
   '/home': typeof AuthenticatedHomeRoute
   '/library': typeof AuthenticatedLibraryRoute
@@ -71,6 +78,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cards': typeof AuthenticatedCardsRoute
+  '/coverage': typeof AuthenticatedCoverageRoute
   '/exam': typeof AuthenticatedExamRoute
   '/home': typeof AuthenticatedHomeRoute
   '/library': typeof AuthenticatedLibraryRoute
@@ -82,6 +90,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/_authenticated/cards': typeof AuthenticatedCardsRoute
+  '/_authenticated/coverage': typeof AuthenticatedCoverageRoute
   '/_authenticated/exam': typeof AuthenticatedExamRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/library': typeof AuthenticatedLibraryRoute
@@ -93,6 +102,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/cards'
+    | '/coverage'
     | '/exam'
     | '/home'
     | '/library'
@@ -102,6 +112,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/cards'
+    | '/coverage'
     | '/exam'
     | '/home'
     | '/library'
@@ -112,6 +123,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/_authenticated/cards'
+    | '/_authenticated/coverage'
     | '/_authenticated/exam'
     | '/_authenticated/home'
     | '/_authenticated/library'
@@ -145,6 +157,13 @@ declare module '@tanstack/react-router' {
       path: '/cards'
       fullPath: '/cards'
       preLoaderRoute: typeof AuthenticatedCardsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/coverage': {
+      id: '/_authenticated/coverage'
+      path: '/coverage'
+      fullPath: '/coverage'
+      preLoaderRoute: typeof AuthenticatedCoverageRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/exam': {
@@ -187,6 +206,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedCardsRoute: typeof AuthenticatedCardsRoute
+  AuthenticatedCoverageRoute: typeof AuthenticatedCoverageRoute
   AuthenticatedExamRoute: typeof AuthenticatedExamRoute
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
   AuthenticatedLibraryRoute: typeof AuthenticatedLibraryRoute
@@ -196,6 +216,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCardsRoute: AuthenticatedCardsRoute,
+  AuthenticatedCoverageRoute: AuthenticatedCoverageRoute,
   AuthenticatedExamRoute: AuthenticatedExamRoute,
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
   AuthenticatedLibraryRoute: AuthenticatedLibraryRoute,
