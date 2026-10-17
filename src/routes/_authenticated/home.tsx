@@ -33,8 +33,13 @@ function Home() {
     try {
       const ids = await pendingChunks(kind, domain, 500);
       if (!ids.length) { toast.info("Everything in this domain is already covered."); return; }
+      const doneBefore = cov
+        ? Object.values(cov).reduce((a, c) => a + (domain === null || c ? (kind === "cards" ? c.cards : c.mcq) : 0), 0)
+        : 0;
+      const done = domain === null ? doneBefore : 0;
+      const total = done + ids.length;
       for (let i = 0; i < ids.length && !stop.current; i++) {
-        setStatus(`Section ${i + 1} of ${ids.length} · ${made} created`);
+        setStatus(`Section ${done + i + 1} of ${total} · ${made} created`);
         const r = kind === "cards" ? await genCards({ data: { chunkId: ids[i] } }) : await genMcq({ data: { chunkId: ids[i] } });
         made += r.count;
         if (i % 3 === 2) qc.invalidateQueries({ queryKey: ["coverage"] });
