@@ -81,6 +81,10 @@ function Home() {
         </div>
       )}
 
+      {totalChunks > 0 && (
+        <Link to="/coverage" className="mx-5 mt-3 block rounded-xl border bg-card p-3 text-center text-sm font-medium text-primary">View coverage report — find gaps →</Link>
+      )}
+
       <div className="space-y-3 p-5">
         {DOMAINS.map((d) => {
           const c = cov?.[d.id];
