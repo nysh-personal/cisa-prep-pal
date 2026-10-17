@@ -55,7 +55,7 @@ function Chat({ initial, onCleared }: { initial: AskMessage[]; onCleared: () => 
   async function clear() {
     if (!confirm("Clear the whole conversation?")) return;
     const { error } = await supabase.from("chat_messages").delete().not("id", "is", null);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setMessages([]); onCleared();
   }
 
