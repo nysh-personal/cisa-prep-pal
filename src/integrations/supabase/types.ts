@@ -58,6 +58,36 @@ export type Database = {
           },
         ]
       }
+      chat_messages: {
+        Row: {
+          created_at: string
+          id: string
+          metadata: Json | null
+          msg_id: string
+          parts: Json
+          role: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          msg_id: string
+          parts: Json
+          role: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          msg_id?: string
+          parts?: Json
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       chunks: {
         Row: {
           cards_done: boolean
@@ -65,6 +95,7 @@ export type Database = {
           created_at: string
           document_id: string
           domain: number
+          fts: unknown
           id: string
           idx: number
           mcq_done: boolean
@@ -76,6 +107,7 @@ export type Database = {
           created_at?: string
           document_id: string
           domain: number
+          fts?: unknown
           id?: string
           idx: number
           mcq_done?: boolean
@@ -87,6 +119,7 @@ export type Database = {
           created_at?: string
           document_id?: string
           domain?: number
+          fts?: unknown
           id?: string
           idx?: number
           mcq_done?: boolean
@@ -208,7 +241,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      search_chunks: {
+        Args: { n?: number; q: string }
+        Returns: {
+          content: string
+          document_id: string
+          domain: number
+          id: string
+          idx: number
+          rank: number
+          title: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

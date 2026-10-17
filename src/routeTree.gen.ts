@@ -11,12 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthenticatedAskRouteImport } from './routes/_authenticated/ask'
 import { Route as AuthenticatedCardsRouteImport } from './routes/_authenticated/cards'
 import { Route as AuthenticatedCoverageRouteImport } from './routes/_authenticated/coverage'
 import { Route as AuthenticatedExamRouteImport } from './routes/_authenticated/exam'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
 import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
 import { Route as AuthenticatedPracticeRouteImport } from './routes/_authenticated/practice'
+import { Route as ApiAskRouteImport } from './routes/api/ask'
 import { Route as AuthenticatedLibraryDocIdRouteImport } from './routes/_authenticated/library_.$docId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -27,6 +29,11 @@ const IndexRoute = IndexRouteImport.update({
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAskRoute = AuthenticatedAskRouteImport.update({
+  id: '/ask',
+  path: '/ask',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedCardsRoute = AuthenticatedCardsRouteImport.update({
   id: '/cards',
@@ -58,6 +65,11 @@ const AuthenticatedPracticeRoute = AuthenticatedPracticeRouteImport.update({
   path: '/practice',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiAskRoute = ApiAskRouteImport.update({
+  id: '/api/ask',
+  path: '/api/ask',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedLibraryDocIdRoute =
   AuthenticatedLibraryDocIdRouteImport.update({
     id: '/library_/$docId',
@@ -67,73 +79,86 @@ const AuthenticatedLibraryDocIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ask': typeof AuthenticatedAskRoute
   '/cards': typeof AuthenticatedCardsRoute
   '/coverage': typeof AuthenticatedCoverageRoute
   '/exam': typeof AuthenticatedExamRoute
   '/home': typeof AuthenticatedHomeRoute
   '/library': typeof AuthenticatedLibraryRoute
   '/practice': typeof AuthenticatedPracticeRoute
+  '/api/ask': typeof ApiAskRoute
   '/library/$docId': typeof AuthenticatedLibraryDocIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ask': typeof AuthenticatedAskRoute
   '/cards': typeof AuthenticatedCardsRoute
   '/coverage': typeof AuthenticatedCoverageRoute
   '/exam': typeof AuthenticatedExamRoute
   '/home': typeof AuthenticatedHomeRoute
   '/library': typeof AuthenticatedLibraryRoute
   '/practice': typeof AuthenticatedPracticeRoute
+  '/api/ask': typeof ApiAskRoute
   '/library/$docId': typeof AuthenticatedLibraryDocIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/_authenticated/ask': typeof AuthenticatedAskRoute
   '/_authenticated/cards': typeof AuthenticatedCardsRoute
   '/_authenticated/coverage': typeof AuthenticatedCoverageRoute
   '/_authenticated/exam': typeof AuthenticatedExamRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/library': typeof AuthenticatedLibraryRoute
   '/_authenticated/practice': typeof AuthenticatedPracticeRoute
+  '/api/ask': typeof ApiAskRoute
   '/_authenticated/library_/$docId': typeof AuthenticatedLibraryDocIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/ask'
     | '/cards'
     | '/coverage'
     | '/exam'
     | '/home'
     | '/library'
     | '/practice'
+    | '/api/ask'
     | '/library/$docId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/ask'
     | '/cards'
     | '/coverage'
     | '/exam'
     | '/home'
     | '/library'
     | '/practice'
+    | '/api/ask'
     | '/library/$docId'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/_authenticated/ask'
     | '/_authenticated/cards'
     | '/_authenticated/coverage'
     | '/_authenticated/exam'
     | '/_authenticated/home'
     | '/_authenticated/library'
     | '/_authenticated/practice'
+    | '/api/ask'
     | '/_authenticated/library_/$docId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  ApiAskRoute: typeof ApiAskRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -151,6 +176,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/ask': {
+      id: '/_authenticated/ask'
+      path: '/ask'
+      fullPath: '/ask'
+      preLoaderRoute: typeof AuthenticatedAskRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/cards': {
       id: '/_authenticated/cards'
@@ -194,6 +226,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPracticeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/ask': {
+      id: '/api/ask'
+      path: '/api/ask'
+      fullPath: '/api/ask'
+      preLoaderRoute: typeof ApiAskRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/library_/$docId': {
       id: '/_authenticated/library_/$docId'
       path: '/library/$docId'
@@ -205,6 +244,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAskRoute: typeof AuthenticatedAskRoute
   AuthenticatedCardsRoute: typeof AuthenticatedCardsRoute
   AuthenticatedCoverageRoute: typeof AuthenticatedCoverageRoute
   AuthenticatedExamRoute: typeof AuthenticatedExamRoute
@@ -215,6 +255,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAskRoute: AuthenticatedAskRoute,
   AuthenticatedCardsRoute: AuthenticatedCardsRoute,
   AuthenticatedCoverageRoute: AuthenticatedCoverageRoute,
   AuthenticatedExamRoute: AuthenticatedExamRoute,
@@ -230,6 +271,7 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  ApiAskRoute: ApiAskRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
