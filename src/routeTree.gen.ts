@@ -16,6 +16,7 @@ import { Route as AuthenticatedExamRouteImport } from './routes/_authenticated/e
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
 import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
 import { Route as AuthenticatedPracticeRouteImport } from './routes/_authenticated/practice'
+import { Route as AuthenticatedLibraryDocIdRouteImport } from './routes/_authenticated/library_.$docId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -51,6 +52,12 @@ const AuthenticatedPracticeRoute = AuthenticatedPracticeRouteImport.update({
   path: '/practice',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedLibraryDocIdRoute =
+  AuthenticatedLibraryDocIdRouteImport.update({
+    id: '/library_/$docId',
+    path: '/library/$docId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/home': typeof AuthenticatedHomeRoute
   '/library': typeof AuthenticatedLibraryRoute
   '/practice': typeof AuthenticatedPracticeRoute
+  '/library/$docId': typeof AuthenticatedLibraryDocIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -67,6 +75,7 @@ export interface FileRoutesByTo {
   '/home': typeof AuthenticatedHomeRoute
   '/library': typeof AuthenticatedLibraryRoute
   '/practice': typeof AuthenticatedPracticeRoute
+  '/library/$docId': typeof AuthenticatedLibraryDocIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -77,12 +86,27 @@ export interface FileRoutesById {
   '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/library': typeof AuthenticatedLibraryRoute
   '/_authenticated/practice': typeof AuthenticatedPracticeRoute
+  '/_authenticated/library_/$docId': typeof AuthenticatedLibraryDocIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cards' | '/exam' | '/home' | '/library' | '/practice'
+  fullPaths:
+    | '/'
+    | '/cards'
+    | '/exam'
+    | '/home'
+    | '/library'
+    | '/practice'
+    | '/library/$docId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cards' | '/exam' | '/home' | '/library' | '/practice'
+  to:
+    | '/'
+    | '/cards'
+    | '/exam'
+    | '/home'
+    | '/library'
+    | '/practice'
+    | '/library/$docId'
   id:
     | '__root__'
     | '/'
@@ -92,6 +116,7 @@ export interface FileRouteTypes {
     | '/_authenticated/home'
     | '/_authenticated/library'
     | '/_authenticated/practice'
+    | '/_authenticated/library_/$docId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -150,6 +175,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPracticeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/library_/$docId': {
+      id: '/_authenticated/library_/$docId'
+      path: '/library/$docId'
+      fullPath: '/library/$docId'
+      preLoaderRoute: typeof AuthenticatedLibraryDocIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -159,6 +191,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
   AuthenticatedLibraryRoute: typeof AuthenticatedLibraryRoute
   AuthenticatedPracticeRoute: typeof AuthenticatedPracticeRoute
+  AuthenticatedLibraryDocIdRoute: typeof AuthenticatedLibraryDocIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -167,6 +200,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
   AuthenticatedLibraryRoute: AuthenticatedLibraryRoute,
   AuthenticatedPracticeRoute: AuthenticatedPracticeRoute,
+  AuthenticatedLibraryDocIdRoute: AuthenticatedLibraryDocIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
