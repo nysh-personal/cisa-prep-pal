@@ -17,8 +17,8 @@ export async function fetchCoverage(): Promise<Coverage> {
   const cov: Coverage = {};
   for (let d = 1; d <= 5; d++) cov[d] = { total: 0, cards: 0, mcq: 0, cardCount: 0, qCount: 0 };
   const count = async (table: "chunks" | "cards" | "questions", d: number, extra?: "cards_done" | "mcq_done") => {
-    let q = supabase.from(table).select("id", { count: "exact", head: true }).eq("domain", d);
-    if (extra) q = q.eq(extra, true);
+    let q: any = supabase.from(table).select("id", { count: "exact", head: true }).eq("domain", d);
+    if (extra) q = (q as any).eq(extra, true);
     const { count } = await q;
     return count ?? 0;
   };

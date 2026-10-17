@@ -14,7 +14,7 @@ export const Route = createFileRoute("/_authenticated/exam")({
 });
 
 const DURATION = 4 * 60 * 60;
-const shuffle = <T,>(a: T[]) => { const b = [...a]; for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
+const shuffle = <T,>(a: T[]) => { const b = [...a]; for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = b[i]!; b[i] = b[j]!; b[j] = t; } return b; };
 
 function Exam() {
   const [qs, setQs] = useState<Q[] | null>(null);
@@ -50,7 +50,7 @@ function Exam() {
     if (!cur) return;
     const by: Record<number, { c: number; n: number }> = {};
     let correct = 0;
-    cur.forEach((q, k) => { by[q.domain] ??= { c: 0, n: 0 }; by[q.domain].n++; if (a[k] === q.answer) { by[q.domain].c++; correct++; } });
+    cur.forEach((q, k) => { const r = (by[q.domain] ??= { c: 0, n: 0 }); r.n++; if (a[k] === q.answer) { r.c++; correct++; } });
     setResult({ correct, total: cur.length, by });
     supabase.from("exam_attempts").insert({ total: cur.length, correct, by_domain: by }).then(() => refetch());
   }
@@ -106,7 +106,7 @@ function Exam() {
         <span className={left < 600 ? "font-mono font-semibold text-destructive" : "font-mono font-semibold"}>{fmt(left)}</span>
       </div>
       <Progress value={(answered / qs.length) * 100} className="h-1" />
-      <div className="mt-5"><QuestionView q={qs[i]} picked={ans[i] ?? null} onPick={(o) => setAns({ ...ans, [i]: o })} reveal={false} /></div>
+      <div className="mt-5"><QuestionView q={qs[i]!} picked={ans[i] ?? null} onPick={(o) => setAns({ ...ans, [i]: o })} reveal={false} /></div>
       <div className="mt-5 grid grid-cols-2 gap-3">
         <Button variant="outline" className="h-12" disabled={i === 0} onClick={() => setI(i - 1)}>Previous</Button>
         {i < qs.length - 1
