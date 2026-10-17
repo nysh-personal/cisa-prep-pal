@@ -36,13 +36,14 @@ export async function handleAsk(request: Request) {
   // Retrieve relevant book sections with keyword search (OR of meaningful terms)
   const terms = question.toLowerCase().replace(/[^a-z0-9\s-]/g, " ").split(/\s+/).filter((w) => w.length > 2 && !STOP.has(w));
   let sources: AskSource[] = [];
+  let contexts: string[] = [];
   if (terms.length) {
     const { data, error } = await supabase.rpc("search_chunks", { q: terms.join(" or "), n: 6 });
     if (error) console.error("search_chunks", error);
     sources = (data ?? []).map((r, i) => ({ n: i + 1, documentId: r.document_id, title: r.title, section: r.idx + 1, domain: r.domain, excerpt: r.content.slice(0, 220) }));
-    var contexts = (data ?? []).map((r, i) => `[S${i + 1}] "${r.title}", Section ${r.idx + 1} (CISA Domain ${r.domain})\n${r.content}`);
+    contexts = (data ?? []).map((r, i) => `[S${i + 1}] "${r.title}", Section ${r.idx + 1} (CISA Domain ${r.domain})\n${r.content}`);
   }
-  const ctx = typeof contexts !== "undefined" && contexts.length ? contexts.join("\n\n---\n\n") : "No matching sections were found in the candidate's books.";
+  const ctx = contexts.length ? contexts.join("\n\n---\n\n") : "No matching sections were found in the candidate's books.";
 
   const instructions = `You are a CISA exam tutor. Answer the candidate's question using ONLY the study material excerpts below from their own books.
 - Cite every claim with the source tag in square brackets, e.g. [S1] or [S2][S4].
