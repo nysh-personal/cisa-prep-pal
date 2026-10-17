@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
@@ -78,10 +78,10 @@ function Library() {
         {docs?.map((d) => (
           <div key={d.id} className="flex items-center gap-3 rounded-xl bg-card p-4 shadow-card">
             <FileText className="h-5 w-5 shrink-0 text-primary" />
-            <div className="min-w-0 flex-1">
+            <Link to="/library/$docId" params={{ docId: d.id }} className="min-w-0 flex-1">
               <p className="truncate font-medium">{d.title}</p>
-              <p className="text-xs text-muted-foreground">{d.chunk_count} sections</p>
-            </div>
+              <p className="text-xs text-primary">{d.chunk_count} sections · Review domains →</p>
+            </Link>
             <Button size="icon" variant="ghost" onClick={() => remove(d.id)} aria-label="Delete"><Trash2 className="h-4 w-4" /></Button>
           </div>
         ))}
