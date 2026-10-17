@@ -10,33 +10,93 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthenticatedCardsRouteImport } from './routes/_authenticated/cards'
+import { Route as AuthenticatedExamRouteImport } from './routes/_authenticated/exam'
+import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
+import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
+import { Route as AuthenticatedPracticeRouteImport } from './routes/_authenticated/practice'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedCardsRoute = AuthenticatedCardsRouteImport.update({
+  id: '/cards',
+  path: '/cards',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedExamRoute = AuthenticatedExamRouteImport.update({
+  id: '/exam',
+  path: '/exam',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedLibraryRoute = AuthenticatedLibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPracticeRoute = AuthenticatedPracticeRouteImport.update({
+  id: '/practice',
+  path: '/practice',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cards': typeof AuthenticatedCardsRoute
+  '/exam': typeof AuthenticatedExamRoute
+  '/home': typeof AuthenticatedHomeRoute
+  '/library': typeof AuthenticatedLibraryRoute
+  '/practice': typeof AuthenticatedPracticeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cards': typeof AuthenticatedCardsRoute
+  '/exam': typeof AuthenticatedExamRoute
+  '/home': typeof AuthenticatedHomeRoute
+  '/library': typeof AuthenticatedLibraryRoute
+  '/practice': typeof AuthenticatedPracticeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/_authenticated/cards': typeof AuthenticatedCardsRoute
+  '/_authenticated/exam': typeof AuthenticatedExamRoute
+  '/_authenticated/home': typeof AuthenticatedHomeRoute
+  '/_authenticated/library': typeof AuthenticatedLibraryRoute
+  '/_authenticated/practice': typeof AuthenticatedPracticeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/cards' | '/exam' | '/home' | '/library' | '/practice'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/cards' | '/exam' | '/home' | '/library' | '/practice'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/_authenticated/cards'
+    | '/_authenticated/exam'
+    | '/_authenticated/home'
+    | '/_authenticated/library'
+    | '/_authenticated/practice'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +108,73 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/cards': {
+      id: '/_authenticated/cards'
+      path: '/cards'
+      fullPath: '/cards'
+      preLoaderRoute: typeof AuthenticatedCardsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/exam': {
+      id: '/_authenticated/exam'
+      path: '/exam'
+      fullPath: '/exam'
+      preLoaderRoute: typeof AuthenticatedExamRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/home': {
+      id: '/_authenticated/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof AuthenticatedHomeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/library': {
+      id: '/_authenticated/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof AuthenticatedLibraryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/practice': {
+      id: '/_authenticated/practice'
+      path: '/practice'
+      fullPath: '/practice'
+      preLoaderRoute: typeof AuthenticatedPracticeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedCardsRoute: typeof AuthenticatedCardsRoute
+  AuthenticatedExamRoute: typeof AuthenticatedExamRoute
+  AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
+  AuthenticatedLibraryRoute: typeof AuthenticatedLibraryRoute
+  AuthenticatedPracticeRoute: typeof AuthenticatedPracticeRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedCardsRoute: AuthenticatedCardsRoute,
+  AuthenticatedExamRoute: AuthenticatedExamRoute,
+  AuthenticatedHomeRoute: AuthenticatedHomeRoute,
+  AuthenticatedLibraryRoute: AuthenticatedLibraryRoute,
+  AuthenticatedPracticeRoute: AuthenticatedPracticeRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

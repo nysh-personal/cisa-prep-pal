@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { DOMAINS, examAllocation } from "@/lib/domains";
@@ -43,19 +43,16 @@ function Exam() {
     setQs(shuffle(picked)); setAns({}); setI(0); setLeft(Math.round(DURATION * picked.length / 150)); setResult(null);
   }
 
-  async function submit() {
-    setQs((cur) => {
-      if (!cur) return cur;
-      setAns((a) => {
-        const by: Record<number, { c: number; n: number }> = {};
-        let correct = 0;
-        cur.forEach((q, k) => { by[q.domain] ??= { c: 0, n: 0 }; by[q.domain].n++; if (a[k] === q.answer) { by[q.domain].c++; correct++; } });
-        setResult({ correct, total: cur.length, by });
-        supabase.from("exam_attempts").insert({ total: cur.length, correct, by_domain: by }).then(() => refetch());
-        return a;
-      });
-      return cur;
-    });
+  const latest = useRef({ qs, ans });
+  latest.current = { qs, ans };
+  function submit() {
+    const { qs: cur, ans: a } = latest.current;
+    if (!cur) return;
+    const by: Record<number, { c: number; n: number }> = {};
+    let correct = 0;
+    cur.forEach((q, k) => { by[q.domain] ??= { c: 0, n: 0 }; by[q.domain].n++; if (a[k] === q.answer) { by[q.domain].c++; correct++; } });
+    setResult({ correct, total: cur.length, by });
+    supabase.from("exam_attempts").insert({ total: cur.length, correct, by_domain: by }).then(() => refetch());
   }
 
   const fmt = (s: number) => `${Math.floor(s / 3600)}:${String(Math.floor((s % 3600) / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
