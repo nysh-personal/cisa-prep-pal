@@ -72,7 +72,7 @@ function Chat({ initial, onCleared }: { initial: AskMessage[]; onCleared: () => 
       <Conversation className="flex-1">
         <ConversationContent className="px-5">
           {messages.length === 0 ? (
-            <ConversationEmptyState icon={<BookMarked className="h-10 w-10 text-accent" />} title="What would you like to understand?" description='Try "What's the difference between RPO and RTO?" or "When should an auditor use statistical sampling?"' />
+            <ConversationEmptyState icon={<BookMarked className="h-10 w-10 text-accent" />} title="What would you like to understand?" description={'Try "What is the difference between RPO and RTO?" or "When should an auditor use statistical sampling?"'} />
           ) : messages.map((m) => (
             <Message key={m.id} from={m.role}>
               <MessageContent className={m.role === "user" ? "bg-primary text-primary-foreground" : "bg-transparent"}>
