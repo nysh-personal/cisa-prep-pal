@@ -14,7 +14,195 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      cards: {
+        Row: {
+          back: string
+          chunk_id: string | null
+          created_at: string
+          domain: number
+          front: string
+          id: string
+          known: boolean
+          topic: string
+          user_id: string
+        }
+        Insert: {
+          back: string
+          chunk_id?: string | null
+          created_at?: string
+          domain: number
+          front: string
+          id?: string
+          known?: boolean
+          topic?: string
+          user_id?: string
+        }
+        Update: {
+          back?: string
+          chunk_id?: string | null
+          created_at?: string
+          domain?: number
+          front?: string
+          id?: string
+          known?: boolean
+          topic?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cards_chunk_id_fkey"
+            columns: ["chunk_id"]
+            isOneToOne: false
+            referencedRelation: "chunks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chunks: {
+        Row: {
+          cards_done: boolean
+          content: string
+          created_at: string
+          document_id: string
+          domain: number
+          id: string
+          idx: number
+          mcq_done: boolean
+          user_id: string
+        }
+        Insert: {
+          cards_done?: boolean
+          content: string
+          created_at?: string
+          document_id: string
+          domain: number
+          id?: string
+          idx: number
+          mcq_done?: boolean
+          user_id?: string
+        }
+        Update: {
+          cards_done?: boolean
+          content?: string
+          created_at?: string
+          document_id?: string
+          domain?: number
+          id?: string
+          idx?: number
+          mcq_done?: boolean
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chunks_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      documents: {
+        Row: {
+          chunk_count: number
+          created_at: string
+          id: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          chunk_count?: number
+          created_at?: string
+          id?: string
+          title: string
+          user_id?: string
+        }
+        Update: {
+          chunk_count?: number
+          created_at?: string
+          id?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      exam_attempts: {
+        Row: {
+          by_domain: Json
+          correct: number
+          created_at: string
+          id: string
+          total: number
+          user_id: string
+        }
+        Insert: {
+          by_domain?: Json
+          correct: number
+          created_at?: string
+          id?: string
+          total: number
+          user_id?: string
+        }
+        Update: {
+          by_domain?: Json
+          correct?: number
+          created_at?: string
+          id?: string
+          total?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      questions: {
+        Row: {
+          answer: number
+          chunk_id: string | null
+          created_at: string
+          domain: number
+          explanation: string
+          id: string
+          options: Json
+          stem: string
+          times_correct: number
+          times_seen: number
+          user_id: string
+        }
+        Insert: {
+          answer: number
+          chunk_id?: string | null
+          created_at?: string
+          domain: number
+          explanation?: string
+          id?: string
+          options: Json
+          stem: string
+          times_correct?: number
+          times_seen?: number
+          user_id?: string
+        }
+        Update: {
+          answer?: number
+          chunk_id?: string | null
+          created_at?: string
+          domain?: number
+          explanation?: string
+          id?: string
+          options?: Json
+          stem?: string
+          times_correct?: number
+          times_seen?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "questions_chunk_id_fkey"
+            columns: ["chunk_id"]
+            isOneToOne: false
+            referencedRelation: "chunks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
