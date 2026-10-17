@@ -1,8 +1,7 @@
-import { createOpenAI } from "@ai-sdk/openai";
-import { convertToModelMessages, streamText, type UIMessage } from "ai";
+import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
+import { convertToModelMessages, extractReasoningMiddleware, streamText, wrapLanguageModel, type UIMessage } from "ai";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
-import { createLovableAiGatewayRunIdFetch, getLovableAiGatewayRunId, withLovableAiGatewayRunIdHeader } from "./run-id.server";
 
 export type AskSource = { n: number; documentId: string; title: string; section: number; domain: number; excerpt: string };
 export type AskMetadata = { sources?: AskSource[] };
@@ -58,25 +57,17 @@ ${ctx}`;
   const { error: saveErr } = await supabase.from("chat_messages").insert({ user_id: userId, msg_id: last.id, role: "user", parts: last.parts as never });
   if (saveErr) console.error("save user msg", saveErr);
 
-  const apiKey = process.env["LOVABLE_API_KEY"];
-  if (!apiKey) return json(500, "AI is not configured.");
-  const runIdFetch = createLovableAiGatewayRunIdFetch(getLovableAiGatewayRunId(request));
-  const provider = createOpenAI({
-    baseURL: "https://ai.gateway.lovable.dev/v1",
-    apiKey,
-    headers: { "Lovable-API-Key": apiKey, "X-Lovable-AIG-SDK": "vercel-ai-sdk" },
-    fetch: runIdFetch.fetch,
-  });
+  const apiKey = process.env["MINIMAX_API_KEY"];
+  if (!apiKey) return json(500, "MiniMax key is not configured.");
+  const minimax = createOpenAICompatible({ name: "minimax", baseURL: "https://api.minimax.io/v1", apiKey });
+  const model = wrapLanguageModel({ model: minimax.chatModel("MiniMax-M2"), middleware: extractReasoningMiddleware({ tagName: "think" }) });
 
   const result = streamText({
-    model: provider.responses("openai/gpt-6-astra"),
-    instructions,
+    model,
+    system: instructions,
     messages: await convertToModelMessages(messages),
     abortSignal: request.signal,
-    providerOptions: {
-      openai: { store: false, forceReasoning: true, reasoningEffort: "low", reasoningSummary: "auto", include: ["reasoning.encrypted_content"] },
-    },
-  } as Parameters<typeof streamText>[0]);
+  });
 
   const response = result.toUIMessageStreamResponse<UIMessage<AskMetadata>>({
     originalMessages: messages,
@@ -92,10 +83,10 @@ ${ctx}`;
     onError: (err) => {
       console.error("ask stream", err);
       const status = (err as { statusCode?: number })?.statusCode;
-      if (status === 402) return "AI credits have run out. Add credits in Settings → Plans & credits.";
-      if (status === 429) return "Too many requests right now — please wait a moment and try again.";
+      if (status === 401) return "Your MiniMax key was rejected — check it is still valid.";
+      if (status === 429) return "MiniMax rate limit reached — please wait a moment and try again.";
       return "Sorry, the answer couldn't be generated. Please try again.";
     },
   });
-  return withLovableAiGatewayRunIdHeader(response, runIdFetch);
+  return response;
 }
