@@ -22,7 +22,7 @@ const tabs = [
 
 function Layout() {
   return (
-    <div className="mx-auto min-h-screen w-full max-w-lg bg-background pb-24 sm:max-w-2xl lg:max-w-3xl">
+    <div className="mx-auto min-h-dvh w-full max-w-lg bg-background pb-24 sm:max-w-2xl lg:max-w-3xl">
       <Outlet />
       <nav className="fixed inset-x-0 bottom-0 z-20 border-t bg-card/95 backdrop-blur">
         <div className="mx-auto grid w-full max-w-lg grid-cols-6 pb-[env(safe-area-inset-bottom)] sm:max-w-2xl lg:max-w-3xl">
